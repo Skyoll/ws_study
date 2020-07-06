@@ -17,12 +17,10 @@ services:
   otus-php:
     build: ./otus
     ports:
-      - '9000:9000'
+      - '9001:9001'
     container_name: otus-php
     networks:
       - shared
-    depends_on:
-      - otus-redis
     volumes:
       - ./otus/php.ini:/usr/local/etc/php/conf.d/php.ini
       - ./otus/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
@@ -30,29 +28,6 @@ services:
     environment:
           PHP_IDE_CONFIG: "serverName=Docker"
 
-  otus-redis:
-    image: redis:4.0.12
-    container_name: otus-redis
-    command: redis-server
-    restart: always
-    volumes:
-      - redis-data:/data
-    networks:
-      - shared
-    ports:
-      - 6379:6379
-
-  memcached:
-    image: memcached:latest
-    container_name: mymemcached
-    volumes:
-      - ./otus/memcached:/var/lib/memcached
-    ports:
-      - "11211:11211"
-    depends_on:
-      - otus-php
-    networks:
-      - shared
 
 networks:
   shared:
